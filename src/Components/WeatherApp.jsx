@@ -15,6 +15,7 @@ const WeatherApp = () => {
     let api_key = process.env.REACT_APP_API_KEY;
 
     const [wicon, setWicon] = useState(cloud_icon)
+    console.log("THIS IS THE API KEY  ", api_key)
 
     const search = async () => {
         const element  = document.getElementsByClassName("cityInput")
@@ -23,6 +24,7 @@ const WeatherApp = () => {
         }
 
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${element[0].value}&units=metric&appid=${api_key}`
+        console.log("THIS IS THE URKL KEY  ", url)
 
         let response = await fetch(url);
         let data = await response.json();
@@ -36,25 +38,27 @@ const WeatherApp = () => {
         temp[0].innerHTML = Math.floor(data.main.temp) + "°c";
         location[0].innerHTML = data.name;
 
+        console.log(data.weather[0].icon)
+
         if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") {
             setWicon(clear_icon)
         }
-        if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") {
+        else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") {
             setWicon(cloud_icon)
         }
-        if (data.weather[0].icon === "03d" || data.weather[0].icon === "03n") {
+        else if (data.weather[0].icon === "03d" || data.weather[0].icon === "03n") {
             setWicon(drizzle_icon)
         }
-        if (data.weather[0].icon === "04d" || data.weather[0].icon === "04n") {
+        else if (data.weather[0].icon === "04d" || data.weather[0].icon === "04n") {
             setWicon(drizzle_icon)
         }
-        if (data.weather[0].icon === "09d" || data.weather[0].icon === "09n") {
+        else if (data.weather[0].icon === "09d" || data.weather[0].icon === "09n") {
             setWicon(rain_icon)
         }
-        if (data.weather[0].icon === "10d" || data.weather[0].icon === "10n") {
+        else if (data.weather[0].icon === "10d" || data.weather[0].icon === "10n") {
             setWicon(rain_icon)
         }
-        if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") {
+        else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") {
             setWicon(snow_icon)
         }
         else {
