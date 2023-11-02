@@ -8,14 +8,13 @@ import rain_icon from "../Assets/rain.png"
 import search_icon from "../Assets/search.png"
 import snow_icon from "../Assets/snow.png"
 import wind_icon from "../Assets/wind.png"
-
+import axios from 'axios'; 
 
 const WeatherApp = () => {
 
     let api_key = process.env.REACT_APP_API_KEY;
 
     const [wicon, setWicon] = useState(cloud_icon)
-    console.log("THIS IS THE API KEY  ", api_key)
 
     const search = async () => {
         const element  = document.getElementsByClassName("cityInput")
@@ -24,47 +23,50 @@ const WeatherApp = () => {
         }
 
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${element[0].value}&units=metric&appid=${api_key}`
-        console.log("THIS IS THE URKL KEY  ", url)
+       
 
-        let response = await fetch(url);
-        let data = await response.json();
-        const humidity = document.getElementsByClassName("humidity-percent")
-        const wind = document.getElementsByClassName("wind-rate")
-        const temp = document.getElementsByClassName("weather-temp")
-        const location = document.getElementsByClassName("weather-location")
+        try {
+            const response = await axios.get(url);
+            const data = response.data;
+            const humidity = document.getElementsByClassName("humidity-percent")
+            const wind = document.getElementsByClassName("wind-rate")
+            const temp = document.getElementsByClassName("weather-temp")
+            const location = document.getElementsByClassName("weather-location")
 
-        humidity[0].innerHTML = data.main.humidity + " %";
-        wind[0].innerHTML = Math.floor(data.wind.speed)+ " km/h";
-        temp[0].innerHTML = Math.floor(data.main.temp) + "°c";
-        location[0].innerHTML = data.name;
+            humidity[0].innerHTML = data.main.humidity + " %";
+            wind[0].innerHTML = Math.floor(data.wind.speed)+ " km/h";
+            temp[0].innerHTML = Math.floor(data.main.temp) + "°c";
+            location[0].innerHTML = data.name;
 
-        console.log(data.weather[0].icon)
 
-        if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") {
-            setWicon(clear_icon)
+            if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") {
+                setWicon(clear_icon)
+            }
+            else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") {
+                setWicon(cloud_icon)
+            }
+            else if (data.weather[0].icon === "03d" || data.weather[0].icon === "03n") {
+                setWicon(drizzle_icon)
+            }
+            else if (data.weather[0].icon === "04d" || data.weather[0].icon === "04n") {
+                setWicon(drizzle_icon)
+            }
+            else if (data.weather[0].icon === "09d" || data.weather[0].icon === "09n") {
+                setWicon(rain_icon)
+            }
+            else if (data.weather[0].icon === "10d" || data.weather[0].icon === "10n") {
+                setWicon(rain_icon)
+            }
+            else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") {
+                setWicon(snow_icon)
+            }
+            else {
+            setWicon(clear_icon)  
+            }
+    
+        } catch (error) {
+            console.error("An error occurred:", error);
         }
-        else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") {
-            setWicon(cloud_icon)
-        }
-        else if (data.weather[0].icon === "03d" || data.weather[0].icon === "03n") {
-            setWicon(drizzle_icon)
-        }
-        else if (data.weather[0].icon === "04d" || data.weather[0].icon === "04n") {
-            setWicon(drizzle_icon)
-        }
-        else if (data.weather[0].icon === "09d" || data.weather[0].icon === "09n") {
-            setWicon(rain_icon)
-        }
-        else if (data.weather[0].icon === "10d" || data.weather[0].icon === "10n") {
-            setWicon(rain_icon)
-        }
-        else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") {
-            setWicon(snow_icon)
-        }
-        else {
-          setWicon(clear_icon)  
-        }
-
     }
 
     return (
